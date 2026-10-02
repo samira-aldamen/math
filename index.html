@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 3 — Design Elements Flashcards</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 0.25rem;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .filter-btn {
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 99px;
+    border: 0.5px solid #ccc;
+    background: transparent;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn.active {
+    border-color: #534AB7;
+    color: #534AB7;
+    background: #EEEDFE;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+  }
+  .card {
+    background: #fff;
+    border: 0.5px solid #e0dfd8;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid #e0dfd8;
+  }
+  .card-num { font-size: 11px; color: #aaa; }
+  .card-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 99px;
+  }
+  .card-body { padding: 14px; }
+  .concept-en {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+  .concept-ar {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  hr {
+    border: none;
+    border-top: 0.5px solid #e0dfd8;
+    margin: 8px 0;
+  }
+  .def-en {
+    font-size: 13px;
+    color: #1a1a1a;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+  .def-ar {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<h1>Chapter 3 — Design Elements</h1>
+<p class="subtitle">Slides 1–15 · بطاقات تلخيص</p>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all', this)">الكل</button>
+  <button class="filter-btn" onclick="filter('engine', this)">Game Engine</button>
+  <button class="filter-btn" onclick="filter('parts', this)">Parts of a Game</button>
+  <button class="filter-btn" onclick="filter('design', this)">Design</button>
+</div>
+
+<div class="cards-grid" id="grid"></div>
+
+<script>
+const cards = [
+  { num:"01", tag:"Parts of a Game", cat:"parts", tagBg:"#E1F5EE", tagColor:"#0F6E56",
+    en:"4 Parts of a Game", ar:"أجزاء اللعبة الأربعة",
+    defEn:"Game Engine · Rules & Mechanics · User Interface · Content & Challenges",
+    defAr:"محرك اللعبة · القواعد والميكانيكا · واجهة المستخدم · المحتوى والتحديات" },
+
+  { num:"02", tag:"Game Engine", cat:"engine", tagBg:"#EEEDFE", tagColor:"#534AB7",
+    en:"Game Engine", ar:"محرك اللعبة",
+    defEn:"Core software (created by programmers) that powers graphics, AI, physics, and describes game systems.",
+    defAr:"البرنامج الأساسي الذي يشغّل الجرافيكس والذكاء الاصطناعي والفيزياء ويحدد أنظمة اللعبة." },
+
+  { num:"03", tag:"Game Engine", cat:"engine", tagBg:"#EEEDFE", tagColor:"#534AB7",
+    en:"Engine: Graphics", ar:"الجرافيكس في المحرك",
+    defEn:"Needs: API to import assets + image manipulation. APIs: OpenGL (Unix/Mac), Direct3D (Windows), Vulkan (future). Class uses LibGDX (2D).",
+    defAr:"يحتاج: API لاستيراد الأصول + معالجة الصور. واجهات: OpenGL لماك/لينكس، Direct3D لويندوز، Vulkan للمستقبل. الكورس يستخدم LibGDX." },
+
+  { num:"04", tag:"Game Engine", cat:"engine", tagBg:"#EEEDFE", tagColor:"#534AB7",
+    en:"Engine: Physics", ar:"الفيزياء في المحرك",
+    defEn:"Defines that gravity, friction, and light exist — but does NOT define exact values (e.g. gravity direction, friction constants).",
+    defAr:"يحدد وجود الجاذبية والاحتكاك والإضاءة — لكن لا يحدد قيمها الدقيقة. هذا دور المصمم." },
+
+  { num:"05", tag:"Game Engine", cat:"engine", tagBg:"#EEEDFE", tagColor:"#534AB7",
+    en:"Engine: Systems", ar:"الأنظمة في المحرك",
+    defEn:"Specifies the space of possibilities, not specific values. Programmer builds the system; gameplay designer fills in parameters.",
+    defAr:"يحدد مجال الاحتمالات وليس القيم. المبرمج يبني النظام، المصمم يملأ المعاملات." },
+
+  { num:"06", tag:"Game Engine", cat:"engine", tagBg:"#EEEDFE", tagColor:"#534AB7",
+    en:"Characteristics of an Engine", ar:"خصائص المحرك",
+    defEn:"Must be broad, adaptable, extensible. Encodes non-mutable decisions. Only needs high-level gameplay specification.",
+    defAr:"لازم يكون واسع، مرن، قابل للتوسع. يثبّت القرارات الثابتة. يحتاج فقط المواصفات العالية المستوى." },
+
+  { num:"07", tag:"Design", cat:"design", tagBg:"#FAECE7", tagColor:"#993C1D",
+    en:"Data-Driven Design", ar:"التصميم المعتمد على البيانات",
+    defEn:"No code outside the engine — everything else is data. Content via level editors. Formats: standard files, JSON, scripts.",
+    defAr:"لا كود خارج المحرك — كل شيء ثانٍ بيانات. المحتوى بمحررات المستويات. الصيغ: ملفات قياسية، JSON، سكريبتات." },
+
+  { num:"08", tag:"Design", cat:"design", tagBg:"#FAECE7", tagColor:"#993C1D",
+    en:"Commercial Game Engines", ar:"المحركات التجارية",
+    defEn:"Libraries for technical tasks but systems still need custom code. Studios buy source code licenses. Bare-bones = graphics + physics + audio.",
+    defAr:"مكتبات للمهام التقنية لكن الأنظمة تحتاج كود خاص. الاستوديوهات تشتري تراخيص الكود. المحرك الأساسي = جرافيكس + فيزياء + صوت." },
+
+  { num:"09", tag:"Design", cat:"design", tagBg:"#FAECE7", tagColor:"#993C1D",
+    en:"Popular Indie Engines (Unity / Unreal)", ar:"محركات الإندي (Unity / Unreal)",
+    defEn:"Use data-driven design. Core code inaccessible (scripts only). Problem: built-in systems are hard to change, designer has less control. Why AAAs went in-house.",
+    defAr:"تستخدم التصميم المعتمد على البيانات. الكود الأساسي مغلق (سكريبتات فقط). مشكلة: صعب التعديل وأقل تحكم للمصمم. لهذا الاستوديوهات الكبيرة صنعت محركاتها." },
+
+  { num:"10", tag:"Parts of a Game", cat:"parts", tagBg:"#E1F5EE", tagColor:"#0F6E56",
+    en:"Systems — Super Mario Bros.", ar:"الأنظمة في ماريو",
+    defEn:"Levels (scrolling maps), Enemies (stomp/bump AI), Blocks (step on / bump below), Mario states (small, big, fiery).",
+    defAr:"المستويات (خرائط تمرير)، الأعداء (ردود الدهس والصدم)، البلوكات، وحالات ماريو (صغير، كبير، ناري)." },
+];
+
+function render(filtered) {
+  document.getElementById('grid').innerHTML = filtered.map(c => `
+    <div class="card">
+      <div class="card-header">
+        <span class="card-num">${c.num}</span>
+        <span class="card-tag" style="background:${c.tagBg};color:${c.tagColor}">${c.tag}</span>
+      </div>
+      <div class="card-body">
+        <div class="concept-en">${c.en}</div>
+        <div class="concept-ar">${c.ar}</div>
+        <hr>
+        <div class="def-en">${c.defEn}</div>
+        <div class="def-ar">${c.defAr}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filter(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render(cat === 'all' ? cards : cards.filter(c => c.cat === cat));
+}
+
+render(cards);
+</script>
+</body>
+</html>
